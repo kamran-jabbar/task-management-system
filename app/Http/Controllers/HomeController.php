@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Task;
 
+/**
+ * Class HomeController
+ * @package App\Http\Controllers
+ */
 class HomeController extends Controller
 {
     /**
-     * Create a new controller instance.
-     *
-     * @return void
+     * HomeController constructor.
      */
     public function __construct()
     {
@@ -17,12 +19,14 @@ class HomeController extends Controller
     }
 
     /**
-     * Show the application dashboard.
-     *
+     * Show the application dashboard with tasks list.
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        return view('home');
+        $user = auth()->user();
+        $tasks = Task::where(['user_id' => $user->id])->get()->toarray();
+
+        return view('home', ['tasks' => $tasks]);
     }
 }
