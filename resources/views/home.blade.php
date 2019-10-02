@@ -5,7 +5,14 @@
         <div class="row">
             <div class="col-md-12">
                 Welcome! You are logged in, you can
-                <a class="btn btn-info">Create Task</a>
+                <a href="{{ url('create-task') }}" class="btn btn-info">Create Task</a>
+                @if (\Session::has('status'))
+                    <div class="alert alert-{!! \Session::get('status') !!}">
+                        <ul style="list-style-type: none">
+                            <li>{!! \Session::get('message') !!}</li>
+                        </ul>
+                    </div>
+                @endif
                 <div class="panel panel-default">
                     <div class="panel-heading">Tasks</div>
                     <div class="panel-body">
@@ -17,6 +24,7 @@
                                 <th scope="col">Description</th>
                                 <th scope="col">Start Time</th>
                                 <th scope="col">End Time</th>
+                                <th scope="col">Time Spent</th>
                                 <th scope="col">Action</th>
                             </tr>
                             </thead>
@@ -29,6 +37,7 @@
                                         <td>{{ $task['description'] }}</td>
                                         <td>{{ $task['start_time'] }}</td>
                                         <td>{{ $task['end_time'] }}</td>
+                                        <td>{{ $task['end_time'] }}</td>
                                         <td>
                                             <a class="btn btn-info">Edit</a>
                                             <a class="btn btn-danger">Delete</a>
@@ -37,7 +46,7 @@
                                 @endforeach
                             @else
                                 <tr>
-                                    <td colspan="6" align="center">
+                                    <td colspan="7" align="center">
                                         No task found.
                                     </td>
                                 </tr>

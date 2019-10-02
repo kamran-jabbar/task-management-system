@@ -18,3 +18,5 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/dashboard', 'HomeController@index')->name('home');
+Route::get('/create-task', 'TaskController@create_form');
+Route::post('/create-task', 'TaskController@store');

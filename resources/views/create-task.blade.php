@@ -4,46 +4,29 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                Welcome! You are logged in, you can
-                <a class="btn btn-info">Create Task</a>
                 <div class="panel panel-default">
-                    <div class="panel-heading">Tasks</div>
+                    <div class="panel-heading">Create Task</div>
                     <div class="panel-body">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Start Time</th>
-                                <th scope="col">End Time</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @if(count($tasks) > 0)
-                                @foreach($tasks as $task)
-                                    <tr>
-                                        <th scope="row">{{ $task['id'] }}</th>
-                                        <td>{{ $task['name'] }}</td>
-                                        <td>{{ $task['description'] }}</td>
-                                        <td>{{ $task['start_time'] }}</td>
-                                        <td>{{ $task['end_time'] }}</td>
-                                        <td>
-                                            <a class="btn btn-info">Edit</a>
-                                            <a class="btn btn-danger">Delete</a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @else
-                                <tr>
-                                    <td colspan="6" align="center">
-                                        No task found.
-                                    </td>
-                                </tr>
-                            @endif
-                            </tbody>
-                        </table>
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul style="list-style-type: none">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+                        {!! Form::open() !!}
+                        <div class="form-group">
+                            {!! Form::label('Task name:') !!}
+                            {!! Form::text('name', old('name'), ['class'=>'form-control', 'placeholder'=>'Enter Task Name']) !!}
+                        </div>
+                        <div class="form-group">
+                            {!! Form::label('Task description:') !!}
+                            {!! Form::textarea('description', old('description'), ['class'=>'form-control', 'placeholder'=>'Enter Task Description']) !!}
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        {!! Form::close() !!}
                     </div>
                 </div>
             </div>
