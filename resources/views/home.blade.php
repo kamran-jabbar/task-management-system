@@ -24,6 +24,7 @@
                                 <th scope="col">Description</th>
                                 <th scope="col">Start Time</th>
                                 <th scope="col">End Time</th>
+                                <th scope="col">Status</th>
                                 <th scope="col">Time Spent</th>
                                 <th scope="col">Action</th>
                             </tr>
@@ -37,9 +38,36 @@
                                         <td>{{ $task['description'] }}</td>
                                         <td>{{ $task['start_time'] }}</td>
                                         <td>{{ $task['end_time'] }}</td>
-                                        <td>{{ $task['end_time'] }}</td>
+                                        <td>@if($task['start_time'] && $task['end_time'])
+                                                Completed
+                                            @elseif($task['start_time'])
+                                                In progress
+                                            @else
+                                                Not started
+                                            @endif
+                                        </td>
                                         <td>
-                                            <a href="">Edit</a>
+                                            {{--@todo: Conditions are too odd so that should get data from query.--}}
+                                            @if($task['start_time'] && $task['end_time'])
+                                                {{
+                                                    (new \Carbon\Carbon($task['start_time']))
+                                                    ->diff(new \Carbon\Carbon($task['end_time']))
+                                                    ->format('%y(y) %m(m) %dd %H:%i:%s')
+                                                }}
+                                            @endif
+                                        </td>
+                                        <td>
+                                            {{--@todo: Conditions are too odd so that should get data from query.--}}
+                                            @if($task['start_time'] && $task['end_time'] === null)
+                                                <a href="{{ url('finish-task') . '/' . $task['id'] }}"
+                                                   onclick="return confirm('Are you sure to finish this task?')">Finish</a>
+                                                |
+                                            @elseif($task['start_time'] === null)
+                                                <a href="{{ url('start-task') . '/' . $task['id'] }}"
+                                                   onclick="return confirm('Are you sure to start this task?')">Start</a>
+                                                |
+                                            @endif
+                                            <a href="">Edit</a> |
                                             <a href="{{ url('delete-task') . '/' . $task['id'] }}"
                                                onclick="return confirm('Are you sure to delete this task?')">Delete</a>
                                         </td>

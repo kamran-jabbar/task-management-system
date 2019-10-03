@@ -25,6 +25,7 @@ class HomeController extends Controller
     public function index()
     {
         $user = auth()->user();
+        /* @todo: we should get the date time difference to calculate time spent from query instead of on blade. */
         $tasks = Task::where(['user_id' => $user->id])->get()->toarray();
 
         return view('home', ['tasks' => $tasks]);
