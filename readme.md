@@ -1,4 +1,4 @@
-Steps to setup the project kindly run these command in the project directory
+# Steps to setup the project kindly run these command in the project directory
 
 1. `git clone https://github.com/kamran-jabbar/task-management-system.git`
 
@@ -12,16 +12,30 @@ Steps to setup the project kindly run these command in the project directory
 
 6. `php artisan serve`
 
-Default user for testing
+# Default user for testing
+
 email: kamran@test.com 
 password: 123456
 
-URLs
+# User manual: 
 
-/login
+User can register by visiting `/register`
 
-/register
+![alt text](http://www.kamranjabbar.com/img/register-page.png)
 
-/dashboard
+User can login by visiting `/login`
 
-/create-task
+![alt text](http://www.kamranjabbar.com/img/login-page.png)
+
+User can view listing of added tasks with detail after login `/dashboard`. 
+
+![alt text](http://www.kamranjabbar.com/img/listing-page.png)
+
+User can create task by visiting `/create-task`
+
+![alt text](http://www.kamranjabbar.com/img/create-task.png)
+
+# Database Schema
+
+![alt text](http://www.kamranjabbar.com/img/task-schema.png)
+
