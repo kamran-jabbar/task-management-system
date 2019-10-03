@@ -6,6 +6,8 @@
             <div class="col-md-12">
                 Welcome! You are logged in, you can
                 <a href="{{ url('create-task') }}" class="btn btn-info">Create Task</a>
+                <br>
+                <p><b>Total time spent(minutes):</b> {{ round($minutes,2) }}</p>
                 @if (\Session::has('status'))
                     <div class="alert alert-{!! \Session::get('status') !!}">
                         <ul style="list-style-type: none">
@@ -25,7 +27,7 @@
                                 <th scope="col">Start Time</th>
                                 <th scope="col">End Time</th>
                                 <th scope="col">Status</th>
-                                <th scope="col">Time Spent</th>
+                                <th scope="col">Time Spent(Y-m-d H:m:s)</th>
                                 <th scope="col">Action</th>
                             </tr>
                             </thead>
@@ -47,12 +49,12 @@
                                             @endif
                                         </td>
                                         <td>
-                                            {{--@todo: Conditions are too odd so that should get data from query.--}}
+                                            {{--@todo: Conditions are too odd so that should get data from query in controller .--}}
                                             @if($task['start_time'] && $task['end_time'])
                                                 {{
                                                     (new \Carbon\Carbon($task['start_time']))
                                                     ->diff(new \Carbon\Carbon($task['end_time']))
-                                                    ->format('%y(y) %m(m) %dd %H:%i:%s')
+                                                    ->format('%Y-%m-%d %H:%i:%s')
                                                 }}
                                             @endif
                                         </td>
@@ -67,7 +69,6 @@
                                                    onclick="return confirm('Are you sure to start this task?')">Start</a>
                                                 |
                                             @endif
-                                            <a href="">Edit</a> |
                                             <a href="{{ url('delete-task') . '/' . $task['id'] }}"
                                                onclick="return confirm('Are you sure to delete this task?')">Delete</a>
                                         </td>
@@ -82,6 +83,7 @@
                             @endif
                             </tbody>
                         </table>
+                        {{ $tasks->links() }}
                     </div>
                 </div>
             </div>

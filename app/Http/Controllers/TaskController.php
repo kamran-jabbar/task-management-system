@@ -13,11 +13,19 @@ use Illuminate\Http\Request;
 class TaskController extends Controller
 {
     /**
-     * TaskController constructor.
+     * The task model implementation.
+     * @var Task
      */
-    public function __construct()
+    private $task;
+
+    /**
+     * TaskController constructor.
+     * @param Task $task
+     */
+    public function __construct(Task $task)
     {
         $this->middleware('auth');
+        $this->task = $task;
     }
 
     /**
@@ -42,20 +50,15 @@ class TaskController extends Controller
         if (!$validatedData) {
             return view('create-task');
         }
-
-        $task = new Task();
-        $task->name = request('name');
-        $task->description = request('description');
-        $task->user_id = auth()->user()->id;
-
-        if (!$task->save()) {
-            return redirect('dashboard')->with([
-                'message' => 'Failed to create the task, please try again.',
-                'status' => 'danger'
-            ]);
+        // save record in db.
+        if ($this->task->store($request) instanceof Task) {
+            return redirect('dashboard')->with(['message' => 'Task created successfully.', 'status' => 'success']);
         }
 
-        return redirect('dashboard')->with(['message' => 'Task created successfully.', 'status' => 'success']);
+        return redirect('dashboard')->with([
+            'message' => 'Failed to create the task, please try again.',
+            'status' => 'danger'
+        ]);
     }
 
     /**
@@ -64,23 +67,14 @@ class TaskController extends Controller
      */
     public function delete($id)
     {
-        $user = auth()->user();
-        $task = Task::where(['user_id' => $user->id, 'id' => $id])->get()->toarray();
-
-        if (count($task)) {
-            $deleteStatus = Task::where('id', $id)->delete();
-
-            if ($deleteStatus) {
-                return redirect('dashboard')->with(['message' => 'Task deleted successfully.', 'status' => 'success']);
-            }
-
-            return redirect('dashboard')->with([
-                'message' => 'Failed to delete the task, please try again.',
-                'status' => 'danger'
-            ]);
+        if ($this->task->deleteById($id)) {
+            return redirect('dashboard')->with(['message' => 'Task deleted successfully.', 'status' => 'success']);
         }
 
-        return redirect('dashboard')->with(['message' => 'You can delete own tasks only.', 'status' => 'danger']);
+        return redirect('dashboard')->with([
+            'message' => 'Failed to delete the task, please try again.',
+            'status' => 'danger'
+        ]);
     }
 
     /**
@@ -89,24 +83,14 @@ class TaskController extends Controller
      */
     public function start($id)
     {
-        $user = auth()->user();
-        $task = Task::where(['user_id' => $user->id, 'id' => $id])->get();
-        /* @todo: have to implement the feature if current user tries to hit URL manually after completion of task will be a trouble :( */
-        if (count($task)) {
-            $startStatus = Task::find($id)->update(['start_time' => new Carbon()]);
-
-            if ($startStatus) {
-                return redirect('dashboard')->with(['message' => 'Task started successfully.', 'status' => 'success']);
-
-            }
-
-            return redirect('dashboard')->with([
-                'message' => 'Failed to start the task, please try again.',
-                'status' => 'danger'
-            ]);
+        if ($this->task->updateById($id, Task::TASK_START_TIME_FIELD_NAME)) {
+            return redirect('dashboard')->with(['message' => 'Task started successfully.', 'status' => 'success']);
         }
 
-        return redirect('dashboard')->with(['message' => 'You can start own tasks only.', 'status' => 'danger']);
+        return redirect('dashboard')->with([
+            'message' => 'Failed to start the task, please try again.',
+            'status' => 'danger'
+        ]);
     }
 
     /**
@@ -115,22 +99,13 @@ class TaskController extends Controller
      */
     public function finish($id)
     {
-        $user = auth()->user();
-        $task = Task::where(['user_id' => $user->id, 'id' => $id])->get();
-        /* @todo: have to implement the feature if current user tries to hit URL manually after completion of task will be a trouble :( */
-        if (count($task)) {
-            $startStatus = Task::find($id)->update(['end_time' => new Carbon()]);
-
-            if ($startStatus) {
-                return redirect('dashboard')->with(['message' => 'Task finished successfully.', 'status' => 'success']);
-            }
-
-            return redirect('dashboard')->with([
-                'message' => 'Failed to start the finish, please try again.',
-                'status' => 'danger'
-            ]);
+        if ($this->task->updateById($id, Task::TASK_FINISH_TIME_FIELD_NAME)) {
+            return redirect('dashboard')->with(['message' => 'Task finished successfully.', 'status' => 'success']);
         }
 
-        return redirect('dashboard')->with(['message' => 'You can finish own tasks only.', 'status' => 'danger']);
+        return redirect('dashboard')->with([
+            'message' => 'Failed to start the finish, please try again.',
+            'status' => 'danger'
+        ]);
     }
 }
