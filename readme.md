@@ -1,3 +1,5 @@
+
+
 # Steps to setup the project kindly run these command in the project directory
 
 1. `git clone https://github.com/kamran-jabbar/task-management-system.git`
@@ -36,6 +38,8 @@ User can create task by visiting `/create-task`
 ![alt text](http://www.kamranjabbar.com/img/create-task.png)
 
 # Database Schema
+
+For login and register, Laravel auth has been used.
 
 ![alt text](http://www.kamranjabbar.com/img/task-schema.png)
 
