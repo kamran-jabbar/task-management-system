@@ -39,8 +39,9 @@
                                         <td>{{ $task['end_time'] }}</td>
                                         <td>{{ $task['end_time'] }}</td>
                                         <td>
-                                            <a class="btn btn-info">Edit</a>
-                                            <a class="btn btn-danger">Delete</a>
+                                            <a href="">Edit</a>
+                                            <a href="{{ url('delete-task') . '/' . $task['id'] }}"
+                                               onclick="return confirm('Are you sure to delete this task?')">Delete</a>
                                         </td>
                                     </tr>
                                 @endforeach
